@@ -1,0 +1,35 @@
+﻿@model WforViolation.Models.CommentViewModel
+<div class="well">
+    <h4>Leave a Comment:</h4>
+
+    @using (Ajax.BeginForm("AddComment", "Comment", null, new AjaxOptions
+    {
+        HttpMethod = "POST",
+        OnSuccess = "SuccessMessage",
+        OnFailure = "FailMessage",
+        OnBegin="OnBegin"
+        //UpdateTargetId = "resultTarget"
+    }, new { id = "MyNewNameId", role = "form" })) // set new Id name for  Form
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            @Html.TextAreaFor(model => model.Content, new { @rows = 3, @placeholder = "Enter Your Comment Here",@class="form-control"})
+        </div>
+    <button type="submit" class="btn btn-primary" id="CommentAddingButton" name="CommentAddingButton">Submit</button>
+        @Html.HiddenFor(model=>model.ViolationId)
+    }
+    </div>
+<script>
+    //\\\\\\\ JS  retrun message SucccessPost or FailPost
+    function SuccessMessage(result) {
+        setLoadingTemplateVisibility(false, "", "#MyNewNameId");
+        $('#CommentsSection').html(result);
+    }
+    function FailMessage() {
+        alert("Fail Post");
+    }
+    function OnBegin()
+    {
+        setLoadingTemplateVisibility(true, 'Comment is being added', '#MyNewNameId');
+    }
+</script>

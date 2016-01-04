@@ -1,0 +1,129 @@
+﻿@using Microsoft.AspNet.Identity;
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Violation Tracker Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        function ajax(page, method, data, success, error) {
+            $.ajax({
+                type: "POST",
+                url: ensureAppPath(page) + "/" + method,
+                data: data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: success,
+                error: error
+            });
+        }
+        function ensureAppPath(path) { // Home
+            var appPath = "@Request.ApplicationPath"; // appPath = isVirtualDirectory ? '/virDirName' : '/'
+            if (appPath !== '/')
+                path = '/' + path;
+            return appPath + path; // /Home - /virDirName/Home
+        }
+  </script>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Violation Tracker", "Index", "Home", null, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            @{
+                                Html.RenderAction("RetrieveMainViolationTypesHome", "Violation");
+                            }
+                        </ul>
+                    </li>
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Create Violation", "ActiveViolationsGeneral", "Violation")</li>
+
+                    }
+
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li>@Html.ActionLink("Admin", "Index", "Account")</li>
+                    }
+                    <li>@Html.ActionLink("Help", "Help", "Home")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        <div class="row">
+
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+                @RenderBody()
+            </div>
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
+                <!-- Blog Search Well -->
+                <div class="well">
+                    <h4>Violation Search</h4>
+                    <div class="input-group">
+                        <input type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" id="SearchButton">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                    <!-- /.input-group -->
+                </div>
+                <!-- Blog Categories Well -->
+                <div class="well">
+                    <h4>Violation Categories</h4>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            @{
+                                Html.RenderAction("RetrieveMainViolationTypesWidget", "Violation");
+                            }
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                </div>
+                <!-- Side Widget Well -->
+                <div class="well">
+                    <h4>Violation Tracker</h4>
+                    <p>This site's aim is to create awarness about violations and track them</p>
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>&copy; @DateTime.Now.Year - Violation Tracker Application</p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </footer>
+        <hr />
+    </div>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

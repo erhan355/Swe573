@@ -1,0 +1,34 @@
+﻿@model IEnumerable<WforViolation.Models.Comment>
+@{
+    Layout = null;
+}
+<div id="CommentsSection">
+    @{var commentsOrdered = Model.OrderByDescending(x => x.PostedDateTime);}
+    @foreach (var item in commentsOrdered)
+    {
+        <div class="media">
+            <a class="pull-left" href="#">
+                @if (item.ApplicationUser != null && item.ApplicationUser.Picture != null)
+                {
+                    <img class="media-object" src="@item.ApplicationUser.Picture.SmallPath" alt="">
+                }
+                else
+                {
+                    <img class="media-object" src="/Content/Resimler/Kucuk/defaultprofileimage.png" alt="">
+
+                }
+            </a>
+
+
+            <div class="media-body">
+                <h4 class="media-heading">
+                    @item.ApplicationUser.UserName
+                    <small>@item.PostedDateTime </small>
+                </h4>
+                @item.Content
+            </div>
+
+
+        </div>
+    }
+</div>

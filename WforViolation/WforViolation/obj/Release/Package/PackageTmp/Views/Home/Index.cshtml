@@ -1,0 +1,56 @@
+﻿@using PagedList
+@using PagedList.Mvc
+
+@model IPagedList<WforViolation.Models.Violation>
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<h1 class="page-header">
+    Home Page
+</h1>
+<div id="wrapper">
+    <div id="page-wrapper" class="container">
+        <div id="wrapper2">
+            <h1>Latest Violations</h1>
+            <div id="filter"></div>
+        </div>
+    </div>
+</div>
+@foreach (var item in Model)
+{
+    <h2>
+        <a href="/Violation/Details/@item.Id">@item.Title</a>
+    </h2>
+    <p class="lead">
+        Posted by @item.CreatorUser.UserName<a href="#"></a>
+    </p>
+    <p><span class="glyphicon glyphicon-time"></span> Posted on @item.CreationDateTime <span class="glyphicon glyphicon-flag"></span> @item.Severity Severity <span class="glyphicon glyphicon-comment"> </span> @item.Comments.Count Comments </p>
+    <p><span class="glyphicon glyphicon-eye-open"> @item.ViewCount People Viewed</span></p>
+    <p>
+        <span class="glyphicon glyphicon-tag"> Main Violation Type : @item.MainViolationName</span>
+
+    </p>
+    <p>
+        <span class="glyphicon glyphicon-tags"> Sub Violation Type : @item.SubViolationName</span>
+       
+    </p>
+    <p><span class="glyphicon glyphicon-asterisk"> Status : @item.Status.ToString()</span></p>
+    <hr>
+    <img class="img-responsive" src="@item.ViolationPictures.FirstOrDefault().MediumPath" alt="">
+    <hr>
+    <p>@item.Description</p>
+    <a class="btn btn-primary" href="/Violation/Details/@item.Id">Details<span class="glyphicon glyphicon-chevron-right"></span></a>
+    <hr>
+}
+@if (Model.Count > 0)
+{
+    <div class="pagedList">
+        @Html.PagedListPager(Model, pagination => Url.Action("Index", new { pagination }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+}
+
+@section scripts
+{
+
+}

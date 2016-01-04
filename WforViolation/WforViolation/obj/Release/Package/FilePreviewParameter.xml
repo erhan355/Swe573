@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="violationtracker" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\eros\\Documents\\Visual\ Studio\ 2013\\Projects\\WforViolation\\WforViolation\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\eros\\Documents\\Visual\ Studio\ 2013\\Projects\\WforViolation\\WforViolation\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="DefaultConnection-Web.config Connection String" description="" value="data source=tcp:erhandefault.database.windows.net,1433;initial catalog=ViolationProject;persist security info=True;user id=erhanadmin@erhandefault;password=Abcd1234;connect timeout=300000;encrypt=True;trustservercertificate=False;MultipleActiveResultSets=True" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\eros\\Documents\\Visual\ Studio\ 2013\\Projects\\WforViolation\\WforViolation\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="WforViolation.Models.ApplicationDbContext-Web.config Connection String" description="" value="Data Source=tcp:erhandefault.database.windows.net,1433;Initial Catalog=ViolationProject;Persist Security Info=True;User ID=erhanadmin@erhandefault;Password=Abcd1234;Connect Timeout=300000;Encrypt=True;TrustServerCertificate=False" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\eros\\Documents\\Visual\ Studio\ 2013\\Projects\\WforViolation\\WforViolation\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='WforViolation.Models.ApplicationDbContext']/@connectionString" />
+  </parameter>
+</parameters>

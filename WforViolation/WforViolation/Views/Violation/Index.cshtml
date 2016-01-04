@@ -1,0 +1,184 @@
+﻿@using PagedList
+@using PagedList.Mvc
+@model  IPagedList<WforViolation.Models.Violation>
+@{
+    ViewBag.Title = "Index";
+}
+
+@{
+    string categoryName = ViewBag.ViolationCategoryName;
+    int categoryId = ViewBag.ViolationCategoryId;
+}
+<h1 class="page-header">
+    @ViewBag.ViolationCategoryName
+</h1>
+
+<div class="checkbox">
+    <label><input type="checkbox" id="filterNearest" name="filterNearest" value="">Filter By Distance to Current Location</label>
+    <input type="text" id="filterKm" name="filterKm" onkeypress="return isNumber(event)"> Meters Area
+</div>
+
+
+<div class="checkbox">
+    <label><input type="checkbox" id="filterSubCategory" name="filterSubCategory" value="">Filter By Sub Category</label>
+</div>
+<div class="form-group">
+    @Html.DropDownList("filterSubList", WforViolation.Extensions.Extensions.GetSubOfMainViolations(categoryName), "AllSubCategories", new { @class = "form-control", @id = "filterSubList" })
+</div>
+<div class="checkbox">
+    <label><input type="checkbox" id="filterSeverity" name="filterSeverity" value="">Filter By Severity</label>
+</div>
+<div class="form-group">
+    @Html.DropDownList("filterSeverityList", WforViolation.Extensions.Extensions.GetSeverityList(), "AllSeverity", new { @class = "form-control", @id = "filterSeverityList" })
+</div>
+<input type="button" class="btn btn-primary" name="FilterButton" id="FilterButton" value="Filter" />
+@foreach (var item in Model)
+{
+    <h2>
+        <a href="/Violation/Details/@item.Id">@item.Title</a>
+    </h2>
+    <p class="lead">
+        Posted by @item.CreatorUser.UserName<a href="#"></a>
+    </p>
+    <p><span class="glyphicon glyphicon-time"></span> Posted on @item.CreationDateTime <span class="glyphicon glyphicon-flag"></span> @item.Severity Severity <span class="glyphicon glyphicon-comment"> </span> @item.Comments.Count Comments </p>
+    <p>
+        <span class="glyphicon glyphicon-eye-open"> @item.ViewCount People Viewed</span>
+        &nbsp;
+    </p>
+    <p>
+        <span class="glyphicon glyphicon-tag"> Main Violation Type : @item.MainViolationName</span>
+
+    </p>
+    <p>
+        <span class="glyphicon glyphicon-tags"> Sub Violation Type : @item.SubViolationName</span>
+    </p>
+    <p><span class="glyphicon glyphicon-asterisk"> Status : @item.Status.ToString()</span></p>
+
+    <hr>
+    <img class="img-responsive" src="@item.ViolationPictures.FirstOrDefault().MediumPath" alt="">
+    <hr>
+    <p>@item.Description</p>
+    <a class="btn btn-primary" href="/Violation/Details/@item.Id">Details<span class="glyphicon glyphicon-chevron-right"></span></a>
+    <hr>
+}
+@if (Model.Count > 0)
+{
+    <div class="pagedList">
+        @Html.PagedListPager(Model, pagination => Url.Action("Index", new { pagination, nearestSelected = "AllDistances", selectedSubCategory = "AllSubCategories", selectedSeverity = "AllSeverity", currentLatitude = "NoneLat", currentLongitutude = "NoneLon" }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+}
+
+<input type="hidden" id="currentHtmlLat" />
+<input type="hidden" id="currentHtmlLong" />
+
+@section scripts
+    {
+
+    <script src="~/Scripts/Common/Common.js"></script>
+    <script src="~/Scripts/Common/JqMessage.js"></script>
+    <script src="~/Scripts/gmaps.js"></script>
+    <script>
+        var currentLat, currentLong;
+        $('#FilterButton').click(function (event) {
+            var subValue, severityValue, filterKm;
+            if ($("#filterSubList option:selected").val() != null && $("#filterSubCategory").is(':checked')) {
+                var subValue = $("#filterSubList option:selected").val();
+
+            }
+            if ($("#filterSeverityList option:selected").length && $("#filterSeverity").is(':checked')) {
+                var severityValue = $("#filterSeverityList option:selected").val();
+
+            }
+            if ($("#filterKm").val().length > 0 && $("#filterNearest").is(':checked')) {
+                var filterKm = $("#filterKm").val();
+
+            }
+            @*var url = "/Violation/Index?id=" + '@categoryId' + "&pagination=1&nearestSelected=" + filterKm + "&selectedSubCategory=" + subValue + "&selectedSeverity=" + severityValue + "&currentLatitude=" + currentLat + "&currentLongitutude=" + currentLong;*@
+            var url = "/Violation/Index/" + '@categoryId' + "?pagination=1&nearestSelected=" + filterKm + "&selectedSubCategory=" + subValue + "&selectedSeverity=" + severityValue + "&currentLatitude=" + currentLat + "&currentLongitutude=" + currentLong;
+
+            window.location.href = url;
+            @*$.ajax({
+                type: 'GET',
+                data: JSON.stringify({ 'currentLat': currentLat, 'currentLong': currentLong, 'nearestSelected': filterKm, 'selectedSubCategory': subValue, 'selectedSeverity': severityValue, 'id': '@categoryId' }),
+                url: ensureAppPath('Violation/Index'),
+                success: function (result) {
+                }
+            });*@
+        });
+        $(document).ready(function () {
+            GMaps.geolocate({
+                success: function (position) {
+                    //map.setCenter(position.coords.latitude, position.coords.longitude);
+                    //jqAlert("Information", position.coords.latitude + ' ' + position.coords.longitude);
+                    currentLat = position.coords.latitude;
+                    currentLong = position.coords.longitude;
+                    $("#currentHtmlLat").val(currentLat);
+                    $("#currentHtmlLong").val(currentLong);
+
+                },
+                error: function (error) {
+                    jqAlert("Information", 'Geolocation failed: ' + error.message);
+                },
+                not_supported: function () {
+                    jqAlert("Information", "Your browser does not support geolocation");
+                },
+                always: function () {
+                    //alert("Done!");
+                }
+            });
+            if ('@ViewBag.nearestSelected' != 'undefined' && '@ViewBag.nearestSelected' != 'AllDistances' && '@ViewBag.nearestSelected' != null && '@ViewBag.nearestSelected' != "") {
+                $('#filterNearest').prop('checked', true);
+                $("#filterKm").val('@ViewBag.nearestSelected');
+            }
+            if ('@ViewBag.selectedSubCategory' != 'undefined' && '@ViewBag.selectedSubCategory' != null && '@ViewBag.selectedSubCategory' != "" && '@ViewBag.selectedSubCategory' != "AllSubCategories") {
+                $('#filterSubCategory').prop('checked', true);
+                $('#filterSubList').val('@ViewBag.selectedSubCategory');
+
+            }
+            if ('@ViewBag.selectedSeverity' != 'undefined' && '@ViewBag.selectedSeverity' != null && '@ViewBag.selectedSeverity' != "" && '@ViewBag.selectedSeverity' != "AllSeverity") {
+                $('#filterSeverity').prop('checked', true);
+                $('#filterSeverityList').val('@ViewBag.selectedSeverity');
+            }
+        });
+
+    </script>
+    <script>
+        function isNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            return true;
+        }
+        $(".pagedList a").click(function () {
+            //event.preventDefault();
+            if ($("#filterSubList option:selected").val() != null && $("#filterSubCategory").is(':checked')) {
+                var subValue = $("#filterSubList option:selected").val();
+                this.href = this.href.replace("AllSubCategories", subValue);
+            }
+            if ($("#filterSeverityList option:selected").length && $("#filterSeverity").is(':checked')) {
+                var severityValue = $("#filterSeverityList option:selected").val();
+                this.href = this.href.replace("AllSeverity", severityValue);
+
+            }
+            if ($("#filterKm").val().length > 0 && $("#filterNearest").is(':checked')) {
+                var filterKm = $("#filterKm").val();
+                this.href = this.href.replace("AllDistances", filterKm);
+
+            }
+            if ($("#currentHtmlLong").val() != "") {
+                this.href = this.href.replace("NoneLon", $("#currentHtmlLong").val());
+            }
+            if ($("#currentHtmlLat").val() != "") {
+                this.href = this.href.replace("NoneLat", $("#currentHtmlLat").val());
+            }
+            //var id = $('select[name="sel1"] option:selected').val();
+
+            ////Replace the predifined QueryString param "xxx" with the "id"
+            //this.href = this.href.replace("xxx", id);
+        });
+    </script>
+}
+
+

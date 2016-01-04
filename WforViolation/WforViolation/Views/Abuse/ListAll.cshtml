@@ -1,0 +1,47 @@
+﻿@model IEnumerable<WforViolation.Models.Abuse>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ListAll</title>
+</head>
+<body>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ViolationId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NotifierId)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NotificationDateTime)
+                </th>
+                <th></th>
+            </tr>
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ViolationId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NotifierId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NotificationDateTime)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Delete", "Delete", new { violationId = item.ViolationId })
+                    </td>
+                </tr>
+            }
+
+        </table>
+        </div>
+</body>
+</html>

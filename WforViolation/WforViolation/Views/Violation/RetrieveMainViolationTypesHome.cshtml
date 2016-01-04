@@ -1,0 +1,18 @@
+﻿@model IEnumerable<WforViolation.Models.ViolationMainType>
+@{
+    Layout = null;
+}
+
+@{
+    ViewBag.Title = "RetrieveMainViolationTypesHome";
+}
+
+@foreach (var item in Model)
+{
+    <li>
+        <a href="/Violation/Index/@item.Id">
+            @item.Name
+        </a>
+    </li>
+}
+

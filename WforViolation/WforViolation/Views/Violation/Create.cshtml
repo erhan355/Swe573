@@ -1,0 +1,198 @@
+﻿@model WforViolation.Models.CreateViolationViewModel
+
+@{
+    ViewBag.Title = "Create";
+}
+<h2>Create Violations</h2>
+
+
+@using (Html.BeginForm("Create", "Violation", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    @*<div class="form-horizontal">*@
+    <h4>Violation</h4>
+    <hr />
+    @Html.ValidationSummary(true)
+    <div class="form-group">
+        @Html.LabelFor(model => model.MainViolationType, new { @class = "control-label col-md-2" })
+
+        <div class="col-md-10">
+            @Html.DropDownListFor(x => x.MainViolationType, WforViolation.Extensions.Extensions.GetMainViolationList(), "Please Select Main Violation Type", new { @class = "form-control", @id = "MainVList" })
+            @Html.ValidationMessageFor(model => model.MainViolationType)
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.SubViolationType, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(x => x.SubViolationType, Enumerable.Empty<SelectListItem>(), "Please Sub Main Violation Type", new { @class = "form-control", @id = "SubVList" })
+            @Html.ValidationMessageFor(model => model.SubViolationType)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Severity, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(model => model.Severity, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Severity)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.Address, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+    </div>
+    <div class="form-group">
+        <div id="map-outer" class="col-md-12">
+            <div id="map-container" class="col-md-offset-2 col-md-10"></div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="control-label col-md-2"></div>
+        <div class="col-md-10 ">
+            @Html.TextBoxFor(m => m.VImage, new { type = "file", @class = "form-control" })
+        </div>
+        @Html.ValidationMessageFor(m => m.VImage)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Title, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.Title, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Title)
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Description, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(model => model.Description, new { cols = 50, @rows = 15 })
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+    </div>
+    <div class="form-group" id="DynamicPart">
+    </div>
+        <div class="form-group">
+        @Html.LabelFor(model => model.ExternalMediaStorage, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(x => x.ExternalMediaStorage, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default" />
+        </div>
+    </div>
+    @Html.HiddenFor(Model => Model.Latitude);
+    @Html.HiddenFor(Model => Model.Longitude);
+
+}
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+    <style>
+        #map-outer {
+            height: 440px;
+            padding: 20px;
+            padding-top: 50px;
+            margin-bottom: 80px;
+        }
+
+        #map-container {
+            height: 400px;
+        }
+    </style>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/jscript">
+        $(function () {
+            $('select#MainVList').change(function () {
+                var selectedMainV = $(this).val();
+
+                //jqAlert("Information", "Ajax öncesi");
+
+                $.ajax({
+                    url: 'LoadSubViolations',
+                    type: 'POST',
+                    data: JSON.stringify({ selectedMainV: selectedMainV }),
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (violationSubTypesList) {
+                        //jqAlert("Information", "Success Fonk");
+                        $("#SubVList").html(""); // clear before appending new list
+                        $.each(violationSubTypesList, function (i, ViolationSubType) {
+                            $("#SubVList").append(
+                                $('<option></option>').val(ViolationSubType.Id).html(ViolationSubType.Name));
+                        });
+                        //jqAlert("Information", "Ok");
+
+                    }
+                });
+            });
+        });
+
+    </script>
+    <script>
+        $(function () {
+            $('select#SubVList').change(function () {
+
+                if( $('select#MainVList').val()!="")
+                {
+                    $.ajax({
+                        url: 'RetrieveViolationDynamic',
+                        cache:false,
+                        type: 'GET',
+                        data: { "selectedSubV": $('select#SubVList').val() },
+                        success: function (ViolationDynamics) {
+                            $('#DynamicPart').html('');
+                            $('#DynamicPart').html(ViolationDynamics);
+                            
+
+                        }
+                    });
+                }
+            })
+        });
+
+
+
+    </script>
+    <script src="~/Scripts/Common/Common.js"></script>
+    <script src="~/Scripts/Common/JqMessage.js"></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=true"></script>
+    <script src="~/Scripts/main.js"></script>
+    <script>
+    //$("#DynamicPart").on("keypress", function (e) {
+    //    jqAlert("", "Unbreak");
+    //});
+    //$(document).on("keypress", "#DynamicPart", function (e) {
+    //    var el = e.target;
+    //    /// Do some stuff ...
+    //    alert($(this).text());
+
+    //});
+    $(document).on("focusout", "#DynamicValue", function (e) {
+        var el = e.target;
+        /// Do some stuff ...
+        //alert($(this).val());
+
+        $.ajax({
+            url: 'CalculateViolationSeverity',
+            cache: false,
+            type: 'GET',
+            data: { "enteredValue": $(this).val(), "violationSubType": $("#SubVList option:selected").val() },
+                success: function (ViolationDynamics) {
+                    jqAlert("Information", ViolationDynamics);
+                }
+    });
+
+    });
+    </script>
+
+}

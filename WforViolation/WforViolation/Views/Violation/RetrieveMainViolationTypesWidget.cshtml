@@ -1,0 +1,48 @@
+﻿@model IEnumerable<WforViolation.Models.ViolationMainType>
+@{
+    Layout = null;
+}
+
+@{
+    int i = 0;
+}
+<div class="col-lg-6">
+    <ul class="list-unstyled">
+        @foreach (var item in Model)
+        {
+            if (i < 6)
+            {
+
+                <li>
+                    <a href="/Violation/Index/@item.Id">
+                        @item.Name
+                    </a>
+                </li>
+            }
+            else
+            {
+                break;
+            }
+            i++;
+        }
+    </ul>
+</div>
+@{i = 0;}
+<div class="col-lg-6">
+    <ul class="list-unstyled">
+        @foreach (var item2 in Model)
+        {
+            if (i >= 6)
+            {
+
+                <li>
+                    <a href="/Violation/Index/@item2.Id">
+                        @item2.Name
+                    </a>
+                </li>
+            }
+            i++;
+        }
+
+    </ul>
+</div>

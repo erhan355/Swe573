@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Add New Sub Category";
+}
+@model WforViolation.Models.ViolationSubType
+<h2>Add New Sub Category</h2>
+@using (Html.BeginForm("AddSubCategory", "Category", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.Label("MainViolationTypes", "Main Violation Types", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("MainViolationTypesList", WforViolation.Extensions.Extensions.GetMainViolationList(), "Please Select Main Violation Type", new { @class = "form-control", @id = "MainVList"})
+
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="checkbox col-md-10 col-md-offset-2">
+            <label><input type="checkbox" id="hasDynamic" name="hasDynamic" value="">Violation Has Dynamic Area?</label>
+        </div>
+    </div>
+        <div class="form-group">
+        @Html.LabelFor(x => x.Name, "Sub Violation Name", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.ViolationDetail.LowSeverityValue, "Low Severity Value", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ViolationDetail.LowSeverityValue, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.ViolationDetail.MediumSeverityValue, "Medium Severity Value", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ViolationDetail.MediumSeverityValue, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.ViolationDetail.HighSeverityValue, "High Severity Value", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ViolationDetail.HighSeverityValue, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.ViolationDetail.CatastrophicSeverityValue, "Catastrophic Severity Value", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ViolationDetail.CatastrophicSeverityValue, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.ViolationDetail.SeverityRelationType, "Severity Relation Type", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(x => x.ViolationDetail.SeverityRelationType, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.ViolationDetail.PropertyName, "Dynamic Name", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.ViolationDetail.PropertyName, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(x => x.ViolationDetail.PropertyType, "Dynamic Value Type", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EnumDropDownListFor(x => x.ViolationDetail.PropertyType, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Add" class="btn btn-default" />
+        </div>
+    </div>
+    @section Scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $('#hasDynamic').prop("checked", true);
+        $('#hasDynamic').change(function () {
+            if ($(this).is(':checked')) {
+                $('#ViolationDetail_LowSeverityValue').prop("disabled", false);
+                $('#ViolationDetail_MediumSeverityValue').prop("disabled", false);
+                $('#ViolationDetail_HighSeverityValue').prop("disabled", false);
+                $('#ViolationDetail_CatastrophicSeverityValue').prop("disabled", false);
+                $('#ViolationDetail_PropertyName').prop("disabled", false);
+                $("#ViolationDetail_PropertyType").prop("readonly", false);
+                $('#ViolationDetail_SeverityRelationType').prop("disabled", false);
+                
+                
+            }
+            else {
+                $('#ViolationDetail_LowSeverityValue').prop("disabled", true);
+                $('#ViolationDetail_MediumSeverityValue').prop("disabled", true);
+                $('#ViolationDetail_HighSeverityValue').prop("disabled", true);
+                $('#ViolationDetail_CatastrophicSeverityValue').prop("disabled", true);
+                $('#ViolationDetail_PropertyName').prop("disabled", true);
+                $('#ViolationDetail_PropertyType').val(2);
+                $("#ViolationDetail_PropertyType").prop("readonly", true);
+                $('#ViolationDetail_SeverityRelationType').prop("disabled", true);
+
+            }
+        });
+    });
+        </script>
+    }
+
+}
+
+

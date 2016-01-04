@@ -1,0 +1,7 @@
+﻿@{
+    Layout = null;
+}
+@model int
+
+@Html.TextBoxFor(x => x, new { @class = "form-control", @type = "number" })
+@Html.Hidden("ModelType", Model.GetType())

@@ -1,0 +1,88 @@
+﻿
+@model WforViolation.Models.Violation
+
+@{
+    ViewBag.Title = "ActiveViolationsGeneral";
+}
+
+<h2>Active Violations</h2>
+
+<h3>Please See Active Violations Before Creating  New One</h3>
+
+<div id="map-outer">
+    <div id="map-container"></div>
+</div>
+<div class="col-md-12 text-center">
+    <a href="/Violation/Create" class="btn btn-primary center-block btn-lg" role="button">Continue</a>
+</div>
+@*https://github.com/Tilotiti/jQuery-Google-Map*@
+@section scripts
+    {
+    <script type="text/javascript" src="http://www.google.com.tr/jsapi"></script>
+    <script type="text/javascript">
+        google.load("maps", "3.4", {
+            other_params: "sensor=false&language=tr"
+        });
+    </script>
+
+    <script src="~/Scripts/jquery.googlemap.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $("#map-container").googleMap({
+                zoom: 14 // Initial zoom level (optional)
+                //coords: [48.895651, 2.290569], // Map center (optional)
+                //type: "ROADMAP" // Map type (optional)
+            });
+        })
+    </script>
+    <script>
+        var markersArray = [];
+        $(document).ready(function () {
+
+            addMarkers();
+
+        });
+        function addMarkers() {
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                url: ensureAppPath('Violation/GetViolationsForMap'),
+                success: function (result) {
+                    // Place markers on map
+                    for (i = 0; i < result.length; i++) {
+                        console.log('result ' + i + ': ' + result[i]['Latitude'] + ', ' + result[i]['Longitude']);
+                        //var latLng = new google.maps.LatLng(result[i]['Latitude'], result[i]['Longitude']);
+                        //var marker = new google.maps.Marker({
+                        //    position: latLng,
+                        //    map: var_map
+                        //});
+                        $("#map-container").addMarker({
+                            coords: [result[i]['Latitude'], result[i]['Longitude']],
+                            url: '/Violation/Details?id=' + [result[i]['Id']]
+                        });
+                        //markersArray.push(marker);
+                    }
+
+                }
+            });
+        }
+    </script>
+}
+<style>
+    #map-outer {
+        height: 440px;
+        padding: 20px;
+        padding-top: 50px;
+        margin-bottom: 80px;
+    }
+
+    #map-container {
+        height: 400px;
+    }
+
+    .btn {
+        margin-bottom: 20px;
+    }
+</style>
+

@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="DefaultConnection-Web.config Connection String" description="DefaultConnection Connection String used in web.config by the application to access the database." defaultValue="Server=tcp:erhandefault.database.windows.net,1433;Database=ViolationProject;User ID=erhanadmin@erhandefault;Password={Abcd1234};Encrypt=True;TrustServerCertificate=False;Connection Timeout=300000;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\eros\\Documents\\Visual\ Studio\ 2013\\Projects\\WforViolation\\WforViolation\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='DefaultConnection']/@connectionString" />
+  </parameter>
+  <parameter name="WforViolation.Models.ApplicationDbContext-Web.config Connection String" description="WforViolation.Models.ApplicationDbContext Connection String used in web.config by the application to access the database." defaultValue="WforViolation.Models.ApplicationDbContext_ConnectionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\eros\\Documents\\Visual\ Studio\ 2013\\Projects\\WforViolation\\WforViolation\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='WforViolation.Models.ApplicationDbContext']/@connectionString" />
+  </parameter>
+  <parameter name="WforViolation.Models.ApplicationDbContext_DatabasePublish-Web.config Connection String" description="WforViolation.Models.ApplicationDbContext_DatabasePublish Connection String used in web.config by the application to access the database." defaultValue="WforViolation.Models.ApplicationDbContext_DatabasePublish.ConnetionString" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\eros\\Documents\\Visual\ Studio\ 2013\\Projects\\WforViolation\\WforViolation\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='WforViolation.Models.ApplicationDbContext_DatabasePublish']/@connectionString" />
+  </parameter>
+</parameters>

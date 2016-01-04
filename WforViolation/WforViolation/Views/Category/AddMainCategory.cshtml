@@ -1,0 +1,57 @@
+﻿@{
+    ViewBag.Title = "Add New Main Category";
+}
+@model WforViolation.Models.ViolationMainType
+<h2>Add New Main Category</h2>
+@using (Html.BeginForm("AddMainCategory", "Category", FormMethod.Post, new { @class = "form-horizontal", role = "form", enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(x => x.Name, "Main Violation Type", new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Add" class="btn btn-default" />
+        </div>
+    </div>
+    @section Scripts
+    {
+        <script>
+            $(document).ready(function () {
+                $('#hasDynamic').prop("checked", true);
+                $('#hasDynamic').change(function () {
+                    if ($(this).is(':checked')) {
+                        $('#ViolationDetail_LowSeverityValue').prop("disabled", false);
+                        $('#ViolationDetail_MediumSeverityValue').prop("disabled", false);
+                        $('#ViolationDetail_HighSeverityValue').prop("disabled", false);
+                        $('#ViolationDetail_CatastrophicSeverityValue').prop("disabled", false);
+                        $('#ViolationDetail_PropertyName').prop("disabled", false);
+                        $("#ViolationDetail_PropertyType").prop("readonly", false);
+                        $('#ViolationDetail_SeverityRelationType').prop("disabled", false);
+
+
+                    }
+                    else {
+                        $('#ViolationDetail_LowSeverityValue').prop("disabled", true);
+                        $('#ViolationDetail_MediumSeverityValue').prop("disabled", true);
+                        $('#ViolationDetail_HighSeverityValue').prop("disabled", true);
+                        $('#ViolationDetail_CatastrophicSeverityValue').prop("disabled", true);
+                        $('#ViolationDetail_PropertyName').prop("disabled", true);
+                        $('#ViolationDetail_PropertyType').val(2);
+                        $("#ViolationDetail_PropertyType").prop("readonly", true);
+                        $('#ViolationDetail_SeverityRelationType').prop("disabled", true);
+
+                    }
+                });
+            });
+        </script>
+    }
+
+}
+
+

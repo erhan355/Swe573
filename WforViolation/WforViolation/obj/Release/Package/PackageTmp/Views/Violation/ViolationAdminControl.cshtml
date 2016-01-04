@@ -1,0 +1,138 @@
+﻿@model IEnumerable<WforViolation.Models.Violation>
+
+@{
+    ViewBag.Title = "ViolationAdminControl";
+}
+
+<h2>ViolationAdminControl</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="table-responsive">
+    <table class="table table-hover">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.MainType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Severity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longtitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastEditorId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MainViolationName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SubViolationName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ExternalMediaStorage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DynamicValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasDynamic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DynamicName)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MainType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreationDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Severity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Longtitude)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Latitude)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ViewCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastEditorId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MainViolationName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SubViolationName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExternalMediaStorage)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DynamicValue)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasDynamic)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DynamicName)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete",new { id = item.Id })
+                </td>
+            </tr>
+        }
+
+    </table>
+    </div>

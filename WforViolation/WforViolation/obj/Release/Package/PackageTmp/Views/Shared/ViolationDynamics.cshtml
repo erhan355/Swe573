@@ -1,0 +1,28 @@
+﻿
+@model WforViolation.Models.ViolationDetailView
+@{
+    Layout = null;
+}
+<div id="DynamicPartialView">
+    @Html.LabelFor(model => model.DynamicName, @Model.DynamicName, new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.EditorFor(x => x.DynamicValue, "violationDynamics_" + Model.DynamicValue.GetType().Name)
+        <a target="_blank" href="/Home/Help">
+            <span class="glyphicon glyphicon-question-sign"></span> Help
+        </a>
+    </div>
+    @*<span>@Model.DynamicValue.GetType().Name</span>*@
+    @*@Html.HiddenFor(x => x.DynamicValue,"violationDynamics_"+Model.DynamicValue.GetType().Name)*@
+    @Html.HiddenFor(model => model.DynamicName, new { @value = Model.DynamicName })
+
+</div>
+<script>
+    //$(document).on("focusout", "#DynamicValue", function (e) {
+    //    var el = e.target;
+    //    /// Do some stuff ...
+    //    alert($(this).text());
+
+    //});
+</script>
+  
+
